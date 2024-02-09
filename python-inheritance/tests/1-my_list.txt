@@ -1,19 +1,110 @@
->>> MyList = __import__('1-my_list').MyList
->>> my_list = MyList()
->>> my_list.append(1)
->>> my_list.append(4)
->>> my_list.append(2)
->>> my_list.append(3)
->>> my_list.append(5)
->>> print(my_list)
-[1, 4, 2, 3, 5]
->>> my_list.print_sorted()
-[1, 2, 3, 4, 5]
->>> print(my_list)
-[1, 4, 2, 3, 5]
->>> my_list = MyList([-1])
->>> my_list.print_sorted()
-[-1]
->>> my_list = MyList()
->>> my_list.print_sorted()
-[]
+# 1. My list
+# Run: python3 -m doctest -v ./tests/1-my_list.txt
+
+Import function from the module
+     >>> MyList = __import__('1-my_list').MyList
+     >>>
+
+Example Test:
+     >>> my_list = MyList()
+     >>> my_list.append(1)
+     >>> my_list.append(4)
+     >>> my_list.append(2)
+     >>> my_list.append(3)
+     >>> my_list.append(5)
+     >>> print(my_list)
+     [1, 4, 2, 3, 5]
+     >>> my_list.print_sorted()
+     [1, 2, 3, 4, 5]
+     >>> print(my_list)
+     [1, 4, 2, 3, 5]
+     >>>
+
+Passing udefined objects:
+     >>> my_list2.print_sorted()
+     Traceback (most recent call last):
+       File "<stdin>", line 1, in <module>
+     NameError: name 'my_list2' is not defined
+     >>>
+
+Passing a list:
+     >>> lst = [7, 2, 5]
+     >>> my_list = MyList(lst)
+     >>> my_list.print_sorted()
+     [2, 5, 7]
+     >>>
+
+Passing an empty list:
+     >>> elst = []
+     >>> my_list = MyList(elst)
+     >>> my_list.print_sorted()
+     []
+     >>>
+
+
+Pass only one number:
+     >>> my_list = MyList()
+     >>> my_list.append(13)
+     >>> my_list.print_sorted()
+     [13]
+     >>> print(my_list)
+     [13]
+     >>>
+
+Pass same number multiple times to sort:
+     >>> my_list2 = MyList()
+     >>> my_list2.append(13)
+     >>> my_list2.append(13)
+     >>> my_list2.append(13)
+     >>> my_list2.append(13)
+     >>> my_list2.print_sorted()
+     [13, 13, 13, 13]
+     >>>
+
+Passing a list as the parent object:
+     >>> my_list = [56, 8, 98]
+     >>> my_list.print_sorted()
+     Traceback (most recent call last):
+       File "<stdin>", line 1, in <module>
+     AttributeError: 'list' object has no attribute 'print_sorted'
+     >>>
+
+Passing negative numbers:
+     >>> MyList = __import__('1-my_list').MyList
+     >>> my_list = MyList()
+     >>> my_list.append(89)
+     >>> my_list.append(17)
+     >>> my_list.append(-12)
+     >>> my_list.append(76)
+     >>> my_list.append(-13)
+     >>> my_list.print_sorted()
+     [-13, -12, 17, 76, 89]
+     >>>
+
+Test Boolean:
+     >>> l = MyList()
+     >>> l.append(-200)
+     >>> l.append(200)
+     >>> l.append(-3)
+     >>> print(l)
+     [-200, 200, -3]
+     >>> id(l) is not id(l.print_sorted())
+     [-200, -3, 200]
+     True
+
+Test type, isinstance and issubclass:
+
+     >>> type(MyList())
+     <class '1-my_list.MyList'>
+
+     >>> isinstance(MyList, object)
+     True
+
+     >>> isinstance(MyList, list)
+     False
+
+     >>> issubclass(MyList, list)
+     True
+
+     >>> 'print_sorted' in dir(MyList)
+     True
