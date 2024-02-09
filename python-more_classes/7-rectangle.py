@@ -1,29 +1,26 @@
 #!/usr/bin/python3
 """
-This module have a class
-that defines a rectangle
+This module defines a Rectangle class.
 """
 
-
 class Rectangle:
-    """ Definition of rectangle attribute """
+    """Definition of a rectangle."""
 
-    number_of_instances = 0
-    print_symbol = "#"
+    number_of_instances = 0  # Initialize class attribute here
+    print_symbol: any = "#"  # Type hint for print_symbol
 
     def __init__(self, width=0, height=0):
-        """ Initialize by passing a width and a height """
-        if type(width) is not int:
-            raise TypeError('width must be an integer')
-        elif type(height) is not int:
-            raise TypeError('height must be an integer')
-        elif height < 0:
-            raise ValueError('height must be >= 0')
-        elif width < 0:
-            raise ValueError('width must be >= 0')
-        else:
-            self.__height = height
-            self.__width = width
+        """Initialize a rectangle with optional width and height."""
+        if not isinstance(width, int):
+            raise TypeError("width must be an integer")
+        if not isinstance(height, int):
+            raise TypeError("height must be an integer")
+        if width < 0:
+            raise ValueError("width must be >= 0")
+        if height < 0:
+            raise ValueError("height must be >= 0")
+        self.__width = width
+        self.__height = height
         Rectangle.number_of_instances += 1
 
     @property
