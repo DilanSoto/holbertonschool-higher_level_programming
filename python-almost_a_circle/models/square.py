@@ -1,78 +1,60 @@
 #!/usr/bin/python3
-"""
-This module have a class that defines
-a Square, and it inherits from Rectangle
-"""
-
-
+""" Square class """
 from models.rectangle import Rectangle
 
 
 class Square(Rectangle):
-    """
-    Class Square that inherits from Rectangle
-    it receive size, x, y and id
-    """
+    """Square class inherits from Rectangle class"""
+    # constructor
+
     def __init__(self, size, x=0, y=0, id=None):
-        """
-        When initialise she validates value and then
-        proceed to assign them.
+        """ init method for square class
+        Args:
+            size (int): size of the square
+            x (int): x position of the square
+            y (int): y position of the square
+            id (int): id of the square
         """
         super().__init__(size, size, x, y, id)
 
     def __str__(self):
-        """ Returns [Square] (id) x/y - size """
-        return (f'[Square] ({self.id}) {self.x}/{self.y} - {self.width}')
+        """ string representation of square """
+        return f"[Square] ({self.id}) {self.x}/{self.y} - {self.width}"
 
+    # Getters
     @property
     def size(self):
-        """
-        Return the size of the sqr using
-        the width of the upper class
-        """
-        return super().width
+        """ size getter """
+        return self.width
 
+    # Setters
     @size.setter
-    def size(self, size):
-        """ Sets the sqr size """
-        self.width = size
+    def size(self, value):
+        """ size setter
+        Args:
+            value (int): value to set size to"""
+        self.width = value
+        self.height = value
 
     def update(self, *args, **kwargs):
+        """update method for square class
+        Args:
+            args (list): list of arguments
+            kwargs (dict): dictionary of arguments
         """
-        Assigns the attribute, if args is empty
-        then it used the kwards to assign
-        """
-        if args is not None:
-            count = 0
-            for arg in args:
-                if count == 0:
-                    self.id = arg
-                if count == 1:
-                    self.width = arg
-                if count == 2:
-                    self.x = arg
-                if count == 3:
-                    self.y = arg
-                count += 1
-
-        for key, elem in kwargs.items():
-            if key == "id":
-                self.id = elem
-            if key == "size":
-                self.width = elem
-            if key == "x":
-                self.x = elem
-            if key == "y":
-                self.y = elem
+        if args:
+            if len(args) >= 1:
+                self.id = args[0]
+            if len(args) >= 2:
+                self.size = args[1]
+            if len(args) >= 3:
+                self.x = args[2]
+            if len(args) >= 4:
+                self.y = args[3]
+        else:
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
     def to_dictionary(self):
-        """
-        Dictionaty representation of the class
-        """
-        dic_sqr = {
-            'id': self.id,
-            'size': self.width,
-            'x': self.x,
-            'y': self.y
-        }
-        return dic_sqr
+        """ dictionary representation of square """
+        return {'id': self.id, 'size': self.size, 'x': self.x, 'y': self.y}

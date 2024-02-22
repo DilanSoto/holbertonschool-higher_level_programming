@@ -1,93 +1,118 @@
 #!/usr/bin/python3
-"""
-This module contains the clase Base.
-The goal of it is to manage id attribute
-in all your future classes and to avoid
-duplicating the same code
-"""
-
-
+""" Base class """
 from os import path
 import json
+import turtle
 
 
 class Base:
-    """ This class will be the base of all other
-    classes in this projects. """
+    """atts for the base class"""
     __nb_objects = 0
 
     def __init__(self, id=None):
-        """
-        This funciton initializa the
-        class by receiving the id argument
-        """
+        """init method for base class
+        Args:
+            id (int): id of the object
+            """
         if id is not None:
             self.id = id
         else:
             Base.__nb_objects += 1
             self.id = Base.__nb_objects
 
-    @staticmethod
-    def to_json_string(list_dictionaries):
-        """
-        This function returns a JSON string representation of
-        the dictionary passed to us
-        """
-        if list_dictionaries is None:
-            return "[]"
-        else:
-            return json.dumps(list_dictionaries)
+    """class methods"""
 
     @classmethod
-    def save_to_file(cls, list_objs):
-        """
-        Writes the JSON string representation of list_objs
-        to a file
-        """
-        filename = cls.__name__ + '.json'
-        with open(filename, 'w') as fd:
-            list_instance = []
-            if list_objs is None:
-                fd.write(cls.to_json_string(list_instance))
-            else:
-                for i in list_objs:
-                    list_instance.append(i.to_dictionary())
-                fd.write(cls.to_json_string(list_instance))
-
-    @staticmethod
-    def from_json_string(json_string):
-        """
-        Return a list of JSON string representation of json_string
-        """
-        if json_string is None:
-            return []
-        else:
-            li = json.loads(json_string)
-            return li
+    def load_from_file(cls):
+        """ class method to return list of instances """
+        import json
+        filename = cls.__name__ + ".json"
+        list_dict = []
+        try:
+            with open(filename, 'r') as f:
+                list_dict = cls.from_json_string(f.read())
+        except FileNotFoundError:
+            pass
+        list_inst = []
+        for dict in list_dict:
+            list_inst.append(cls.create(**dict))
+        return list_inst
 
     @classmethod
     def create(cls, **dictionary):
+        """ class method to return instance with attributes already set
+        Args:
+            dictionary (dict): dictionary of attributes
         """
-        Return an instance witl all attribute aleady set
-        """
-        if cls.__name__ == 'Square':
-            dummy = cls(5)
-        elif cls.__name__ == 'Rectangle':
-            dummy = cls(5, 5)
+        if cls.__name__ == "Rectangle":
+            dummy = cls(1, 1)
+        elif cls.__name__ == "Square":
+            dummy = cls(1)
         cls.update(dummy, **dictionary)
         return dummy
 
     @classmethod
-    def load_from_file(cls):
+    def save_to_file(cls, list_objs):
+        """ class method to write json string to file
+        Args:
+            list_objs (list): list of objects
         """
-        Return a list of instance
+        filename = cls.__name__ + ".json"
+        list_dict = []
+        if list_objs is not None:
+            for obj in list_objs:
+                list_dict.append(obj.to_dictionary())
+        with open(filename, 'w') as f:
+            f.write(cls.to_json_string(list_dict))
+
+    """static methods"""
+
+    @staticmethod
+    def to_json_string(list_dictionaries):
+        """ static method to return json string representation
+        Args:
+            list_dictionaries (list): list of dictionaries
         """
-        filename = cls.__name__ + '.json'
-        if path.exists(filename) is False:
+        if list_dictionaries is None or list_dictionaries is []:
+            return "[]"
+        return json.dumps(list_dictionaries)
+
+    @staticmethod
+    def from_json_string(json_string):
+        if json_string is None or json_string is []:
             return []
-        with open(filename, 'r') as fd:
-            attrs_dic = cls.from_json_string(fd.read())
-            li = []
-            for i in attrs_dic:
-                li.append(cls.create(**i))
-            return li
+        return json.loads(json_string)
+
+    @staticmethod
+    def draw(list_rectangles, list_squares):
+        """ static method to draw all Rectangles and Squares """
+        # Create a turtle object
+        t = turtle.Turtle()
+
+        # Set the turtle speed and pen size
+        t.speed(0)
+        t.pensize(2)
+        # Draw all the Rectangles
+        for rect in list_rectangles:
+            t.penup()
+            t.goto(rect.x, rect.y)
+            t.pendown()
+            t.color("pink")
+            for i in range(2):
+                t.forward(rect.width)
+                t.left(90)
+                t.forward(rect.height)
+                t.left(90)
+
+        # Draw all the Squares
+        for square in list_squares:
+            t.penup()
+            t.goto(square.x, square.y)
+            t.pendown()
+            t.color("violet")
+            for i in range(4):
+                t.forward(square.size)
+                t.left(90)
+
+        # Exit the turtle graphics window
+        turtle.done()

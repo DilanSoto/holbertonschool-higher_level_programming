@@ -1,93 +1,140 @@
 #!/usr/bin/python3
-"""
-This module contains the clase Base.
-The goal of it is to manage id attribute
-in all your future classes and to avoid
-duplicating the same code
-"""
+""" Rectangle class """
+from models.base import Base
 
 
-from os import path
-import json
+class Rectangle(Base):
+    """ Rectangle class inherits from Base class """
 
-
-class Base:
-    """ This class will be the base of all other
-    classes in this projects. """
-    __nb_objects = 0
-
-    def __init__(self, id=None):
+    def __init__(self, width, height, x=0, y=0, id=None):
+        """ init method for rectangle class
+        Args:
+            width (int): width of the rectangle
+            height (int): height of the rectangle
+            x (int): x position of the rectangle
+            y (int): y position of the rectangle
+            id (int): id of the rectangle
         """
-        This funciton initializa the
-        class by receiving the id argument
+        super().__init__(id)
+        self.width = width
+        self.height = height
+        self.x = x
+        self.y = y
+
+    """artgument getters"""
+
+    @property
+    def width(self):
+        """ width getter """
+        return self.__width
+
+    @property
+    def height(self):
+        """ height getter """
+        return self.__height
+
+    @property
+    def x(self):
+        """ x getter """
+        return self.__x
+
+    @property
+    def y(self):
+        """ y getter """
+        return self.__y
+
+    """Argument setters """
+
+    @width.setter
+    def width(self, value):
+        """ width setter
+        Args:
+            value (int): value to set
         """
-        if id is not None:
-            self.id = id
+        if type(value) is not int:
+            raise TypeError("width must be an integer")
+        if value <= 0:
+            raise ValueError("width must be > 0")
+        self.__width = value
+
+    @height.setter
+    def height(self, value):
+        """ height setter
+        Args:
+            value (int): value to set
+        """
+        if type(value) is not int:
+            raise TypeError("height must be an integer")
+        if value <= 0:
+            raise ValueError("height must be > 0")
+        self.__height = value
+
+    @x.setter
+    def x(self, value):
+        """ x setter
+        Args:
+            value (int): value to set
+        """
+        if type(value) is not int:
+            raise TypeError("x must be an integer")
+        if value < 0:
+            raise ValueError("x must be >= 0")
+        self.__x = value
+
+    @y.setter
+    def y(self, value):
+        """ y setter
+        Args:
+            value (int): value to set
+        """
+        if type(value) is not int:
+            raise TypeError("y must be an integer")
+        if value < 0:
+            raise ValueError("y must be >= 0")
+        self.__y = value
+
+    # Methods
+    def area(self):
+        """Calculate the area of a rectangle
+        Returns:
+            The area of the Rectangle
+        """
+        return self.width * self.height
+
+    def display(self):
+        """display the Rectangle using '#' """
+        for i in range(self.y):
+            print()
+        for i in range(self.height):
+            for j in range(self.x):
+                print(" ", end="")
+            for j in range(self.width):
+                print("#", end="")
+            print()
+
+    def __str__(self):
+        """return the string representation of the Rectangle """
+        return (f"[Rectangle] ({self.id}) "
+                f"{self.x}/{self.y} - {self.width}/{self.height}")
+
+    def update(self, *args, **kwargs):
+        """Update the rectangle"""
+        if args:
+            if len(args) >= 1:
+                self.id = args[0]
+            if len(args) >= 2:
+                self.width = args[1]
+            if len(args) >= 3:
+                self.height = args[2]
+            if len(args) >= 4:
+                self.x = args[3]
+            if len(args) >= 5:
+                self.y = args[4]
         else:
-            Base.__nb_objects += 1
-            self.id = Base.__nb_objects
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
-    @staticmethod
-    def to_json_string(list_dictionaries):
-        """
-        This function returns a JSON string representation of
-        the dictionary passed to us
-        """
-        if list_dictionaries is None:
-            return "[]"
-        else:
-            return json.dumps(list_dictionaries)
-
-    @classmethod
-    def save_to_file(cls, list_objs):
-        """
-        Writes the JSON string representation of list_objs
-        to a file
-        """
-        filename = cls.__name__ + '.json'
-        with open(filename, 'w') as fd:
-            list_instance = []
-            if list_objs is None:
-                fd.write(cls.to_json_string(list_instance))
-            else:
-                for i in list_objs:
-                    list_instance.append(i.to_dictionary())
-                fd.write(cls.to_json_string(list_instance))
-
-    @staticmethod
-    def from_json_string(json_string):
-        """
-        Return a list of JSON string representation of json_string
-        """
-        if json_string is None:
-            return []
-        else:
-            li = json.loads(json_string)
-            return li
-
-    @classmethod
-    def create(cls, **dictionary):
-        """
-        Return an instance witl all attribute aleady set
-        """
-        if cls.__name__ == 'Square':
-            dummy = cls(5)
-        elif cls.__name__ == 'Rectangle':
-            dummy = cls(5, 5)
-        cls.update(dummy, **dictionary)
-        return dummy
-
-    @classmethod
-    def load_from_file(cls):
-        """
-        Return a list of instance
-        """
-        filename = cls.__name__ + '.json'
-        if path.exists(filename) is False:
-            return []
-        with open(filename, 'r') as fd:
-            attrs_dic = cls.from_json_string(fd.read())
-            li = []
-            for i in attrs_dic:
-                li.append(cls.create(**i))
-            return li
+    def to_dictionary(self):
+        """return the dictionary representation of a Rectangle"""
+        return {'id': self.id, 'width': self.width, 'height': self.height,
+                'x': self.x, 'y': self.y}
