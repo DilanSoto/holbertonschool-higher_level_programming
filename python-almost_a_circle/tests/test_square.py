@@ -107,5 +107,6 @@ class TestSquare(unittest.TestCase):
         li_sqr_out = Square.load_from_file()
         self.assertNotEqual(li_sqr_out[0], s1)
 
+
 if __name__ == '__main__':
     unittest.main()

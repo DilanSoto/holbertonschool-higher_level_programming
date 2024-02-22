@@ -2,8 +2,9 @@ from models.base import Base
 from models.rectangle import Rectangle
 import unittest
 
+
 class TestBase(unittest.TestCase):
-    """ Testing  initialization """
+    """ Testing initialization """
     def test_init(self):
         new_obj = Base()
         self.assertEqual(new_obj._Base__nb_objects, 1)
@@ -20,7 +21,8 @@ class TestBase(unittest.TestCase):
         r1 = Rectangle(10, 7, 2, 8, 1)
         dic = r1.to_dictionary()
         json = Base.to_json_string([dic])
-        self.assertEqual(json, '[{"x": 2, "y": 8, "id": 1, "height": 7, "width": 10}]')
+        self.assertEqual(json, '[{"x": 2, "y": 8, "id": 1, '
+                               '"height": 7, "width": 10}]')
 
     def test_to_json_empty(self):
         json = Base.to_json_string([])
@@ -56,5 +58,7 @@ class TestBase(unittest.TestCase):
         json = Base.from_json_string("[]")
         self.assertEqual(json, [])
 
+
 if __name__ == '__main__':
     unittest.main()
+
