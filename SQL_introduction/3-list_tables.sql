@@ -1,5 +1,2 @@
--- Script to list all tables in a specific database
-USE %s; -- Replace %s with the database name passed as an argument
-
--- Query to list all tables
+-- A script that lists all the tables of a database in your MySQL server.
 SHOW TABLES;
